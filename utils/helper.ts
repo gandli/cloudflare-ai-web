@@ -86,16 +86,17 @@ export async function basicFetch(
     if (isLogin()) {
         headers.set('Authorization', getToken()!)
     }
-    const response = await fetch('/api' + path, {
+    const response = await fetch('/api/auth' + path, {
         ...options,
         headers,
     })
 
     if (!response.ok) {
-        if (response.status === 401 && response.statusText === 'password incorrect') {
+        const text = await response.text()
+        if (response.status === 401 && text === 'Password Incorrect') {
             passModal.value = true
         }
-        throw new Error(response.status + ' ' + response.statusText + ' ' + await response.text())
+        throw new Error(response.status + ' ' + response.statusText + ' ' + text)
     }
 
     if (response.headers.get('Content-Type')?.includes('text/event-stream')) {
@@ -133,4 +134,11 @@ export function postFetch(path: string, body: Object) {
         },
         body: JSON.stringify(body),
     })
+}
+
+export function streamFetchWithFile(path: string, body: FormData, onStream: (data: string) => void) {
+    return basicFetch(path, {
+        method: "POST",
+        body,
+    }, onStream)
 }

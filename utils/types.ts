@@ -2,7 +2,7 @@ export interface Model {
     id: string
     name: string
     provider: 'openai' | 'workers-ai' | 'google' | 'workers-ai-image'
-    type: 'chat' | 'text-to-image' | 'image-to-text'
+    type: 'chat' | 'text-to-image' | 'universal'
     endpoint?: string
 }
 
@@ -12,12 +12,15 @@ export interface HistoryItem {
     type: 'text' | 'image' | 'image-prompt' | 'error'
     content: string
     role: 'user' | 'assistant'
-    src?: Blob
+    src?: Blob[]
+    src_url?: string[]
+    created_at: number
 }
 
 export interface TabItem {
     id?: number
     label: string
+    created_at: number
 }
 
 export interface OpenAIMessage {
@@ -73,7 +76,7 @@ export interface WorkersRes {
     response: string
 }
 
-export interface GeminiReq {
-    model: string
-    messages: OpenAIMessage[]
-}
+// export interface GeminiReq {
+//     model: string
+//     messages: OpenAIMessage[]
+// }

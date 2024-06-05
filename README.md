@@ -33,12 +33,14 @@ docker run -d --name cloudflare-ai-web \
 - 利用 Cloudflare Workers AI 快速搭建多模态AI平台
 - 支持 Serverless 部署，无需服务器
 - 支持开启访问密码，聊天记录本地存储
-- 轻量化(~638 kB gzip)
-- 支持`ChatGPT` `Gemini Pro`
+- 轻量化(~646 kB gzip)
+- 支持`ChatGPT` `Gemini Pro` `Stable Diffusion` `llama-3` `通义千问`等
 
 ### 模型支持
 
 https://developers.cloudflare.com/workers-ai/models/
+
+你可以在`./utils/db.ts`中增删模型
 
 ## 部署说明
 
@@ -49,9 +51,11 @@ https://developers.cloudflare.com/workers-ai/models/
 | CF_TOKEN       | Cloudflare Workers AI Token        |  
 | CF_GATEWAY     | Cloudflare AI Gateway URL          |    
 | OPENAI_API_KEY | OpenAI API Key (需要ChatGPT时填写)      |     
-| G_API_KEY      | Google AI API Key (需要GeminiPro时填写) |   
-| G_API_URL      | Google AI 反代 (非美国ip填写，或参考以下配置)     |    
+| G_API_KEY      | Google AI API Key (需要GeminiPro时填写) | 
+| G_API_URL      | Google AI 反代 (不支持地区填写，或参考以下配置)     |    
 | PASSWORD       | 访问密码 (可选)                          |   
+
+示例： 查看`.env.example`文件
 
 #### CF_TOKEN
 
@@ -71,7 +75,7 @@ https://dash.cloudflare.com/
 - 添加新 AI Gateway
 - 填写名称和URL slug创建
 - 单击右上角API Endpoints
-- 复制您的Universal Endpoint，设置环境变量
+- 复制您的Universal Endpoint(去掉末尾`/`)，设置环境变量
 
 #### G_API_KEY
 
@@ -79,14 +83,14 @@ https://ai.google.dev/tutorials/rest_quickstart#set_up_your_api_key
 
 #### G_API_URL
 
-参考 https://github.com/Jazee6/gemini-proxy 搭建反代
+参考 https://github.com/Jazee6/gemini-proxy 搭建反代，末尾无需`/`
 
 或者在`nuxt.config.ts`中添加以下配置
 
 ```
 nitro: {
     vercel: {
-        regions: ["cle1", "iad1", "pdx1", "sfo1", "sin1", "syd1", "hnd1", "kix1"]
+        regions: ["sin1", "syd1", "sfo1", "iad1", "pdx1", "cle1"]
     }
 }
 ```

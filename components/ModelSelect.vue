@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {imageGenModels, textGenModels} from "~/utils/db";
+import {imageGenModels, textGenModels, uniModals} from "~/utils/db";
 
 const {t} = useI18n()
 const {selectedModel, openModelSelect} = useGlobalState()
@@ -11,21 +11,29 @@ watch(selectedModel, v => {
   localStorage.setItem('selectedModel', v.id)
 })
 
-const groups = computed(() => [{
-  key: 'text generation',
-  label: t('text_generation'),
-  commands: textGenModels.map(i => ({
-    id: i.id,
-    label: i.name
-  }))
-}, {
-  key: 'image generation',
-  label: t('image_generation'),
-  commands: imageGenModels.map(i => ({
-    id: i.id,
-    label: i.name
-  }))
-}])
+const groups = computed(() => [
+  {
+    key: 'universal',
+    label: t('universal'),
+    commands: uniModals.map(i => ({
+      id: i.id,
+      label: i.name
+    }))
+  }, {
+    key: 'text generation',
+    label: t('text_generation'),
+    commands: textGenModels.map(i => ({
+      id: i.id,
+      label: i.name
+    }))
+  }, {
+    key: 'image generation',
+    label: t('image_generation'),
+    commands: imageGenModels.map(i => ({
+      id: i.id,
+      label: i.name
+    }))
+  }])
 
 function onSelect(option: { id: string }) {
   selectedModel.value = models.find(i => i.id === option.id) || textGenModels[0]
